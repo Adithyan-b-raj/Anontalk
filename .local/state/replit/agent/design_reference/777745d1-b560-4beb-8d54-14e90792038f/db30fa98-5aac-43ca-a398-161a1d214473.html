@@ -1,0 +1,323 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Group Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'whatsapp-green': '#25D366',
+                        'whatsapp-dark': '#128C7E',
+                        'chat-bg': '#E5DDD5',
+                        'sent-msg': '#DCF8C6',
+                        'received-msg': '#FFFFFF'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="font-inter bg-gray-100 h-screen overflow-hidden">
+    <!-- @COMPONENT: ChatApp [main container] -->
+    <div class="flex flex-col h-screen max-w-md mx-auto bg-white shadow-lg">
+        
+        <!-- @COMPONENT: ChatHeader [app header with title] -->
+        <header class="bg-whatsapp-green text-white p-4 shadow-md">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-users text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-semibold">Anonymous Chat</h1>
+                    <p class="text-sm text-green-100" data-bind="onlineCount">42 people online</p>
+                </div>
+            </div>
+        </header>
+        <!-- @END_COMPONENT: ChatHeader -->
+
+        <!-- @COMPONENT: MessageContainer [scrollable message area] -->
+        <div class="flex-1 overflow-y-auto bg-chat-bg p-4 space-y-3" id="messageContainer" style="background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 40 40\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.02\'%3E%3Cpath d=\'M20 20c0 5.5-4.5 10-10 10s-10-4.5-10-10 4.5-10 10-10 10 4.5 10 10zm10 0c0 5.5-4.5 10-10 10s-10-4.5-10-10 4.5-10 10-10 10 4.5 10 10z\'/%3E%3C/g%3E%3C/svg%3E');">
+            
+            <!-- @MAP: messages.map(message => ( -->
+            <!-- Sample received message -->
+            <div class="flex justify-start mb-4" data-mock="true">
+                <div class="max-w-xs lg:max-w-md">
+                    <div class="bg-received-msg rounded-lg px-4 py-2 shadow-sm">
+                        <p class="text-gray-800 text-sm">Hey everyone! How's everyone doing today? 😊</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">2:34 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample sent message -->
+            <div class="flex justify-end mb-4" data-mock="true">
+                <div class="max-w-xs lg:max-w-md">
+                    <div class="bg-sent-msg rounded-lg px-4 py-2 shadow-sm">
+                        <p class="text-gray-800 text-sm">Pretty good! Love this anonymous chat concept 🚀</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">2:35 PM ✓✓</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Another received message -->
+            <div class="flex justify-start mb-4" data-mock="true">
+                <div class="max-w-xs lg:max-w-md">
+                    <div class="bg-received-msg rounded-lg px-4 py-2 shadow-sm">
+                        <p class="text-gray-800 text-sm">Same here! It's nice to chat without worrying about identity</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">2:36 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Long message example -->
+            <div class="flex justify-end mb-4" data-mock="true">
+                <div class="max-w-xs lg:max-w-md">
+                    <div class="bg-sent-msg rounded-lg px-4 py-2 shadow-sm">
+                        <p class="text-gray-800 text-sm">This is a longer message to show how the chat handles text that spans multiple lines. The bubbles should adjust their width accordingly while maintaining good readability.</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">2:37 PM ✓✓</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent messages -->
+            <div class="flex justify-start mb-4" data-mock="true">
+                <div class="max-w-xs lg:max-w-md">
+                    <div class="bg-received-msg rounded-lg px-4 py-2 shadow-sm">
+                        <p class="text-gray-800 text-sm">Anyone here from Europe? 🌍</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">2:38 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-start mb-4" data-mock="true">
+                <div class="max-w-xs lg:max-w-md">
+                    <div class="bg-received-msg rounded-lg px-4 py-2 shadow-sm">
+                        <p class="text-gray-800 text-sm">Yes! From Germany here 🇩🇪</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">2:38 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end mb-4" data-mock="true">
+                <div class="max-w-xs lg:max-w-md">
+                    <div class="bg-sent-msg rounded-lg px-4 py-2 shadow-sm">
+                        <p class="text-gray-800 text-sm">Cool! I'm from the US 🇺🇸</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">2:39 PM ✓✓</p>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+
+        </div>
+        <!-- @END_COMPONENT: MessageContainer -->
+
+        <!-- @COMPONENT: MessageInput [text input and send button] -->
+        <div class="bg-gray-50 p-4 border-t border-gray-200">
+            <div class="flex items-center space-x-3">
+                <!-- @STATE: message:string = "" -->
+                <div class="flex-1 relative">
+                    <input 
+                        type="text" 
+                        id="messageInput"
+                        placeholder="Type a message..." 
+                        class="w-full px-4 py-3 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-whatsapp-green focus:border-transparent text-sm"
+                        data-bind="message"
+                        data-event="keypress:handleKeyPress"
+                        data-mock="true"
+                    />
+                    <!-- Emoji button -->
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="far fa-smile text-lg"></i>
+                    </button>
+                </div>
+                
+                <!-- Send button -->
+                <button 
+                    id="sendButton"
+                    class="w-12 h-12 bg-whatsapp-green hover:bg-whatsapp-dark text-white rounded-full flex items-center justify-center transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg"
+                    data-event="click:sendMessage"
+                    data-implementation="Should validate message and send to server"
+                >
+                    <i class="fas fa-paper-plane text-lg"></i>
+                </button>
+            </div>
+            
+            <!-- Typing indicator (hidden by default) -->
+            <div class="mt-2 text-xs text-gray-500 h-4" id="typingIndicator">
+                <!-- @STATE: showTyping:boolean = false -->
+                <span class="opacity-0" data-bind="typingUsers">Someone is typing...</span>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: MessageInput -->
+
+    </div>
+    <!-- @END_COMPONENT: ChatApp -->
+
+    <!-- @FUNCTIONALITY: Message management, auto-scroll, and real-time updates -->
+    <script>
+        (function() {
+            // TODO: Replace with actual WebSocket or Server-Sent Events for real-time messaging
+            // TODO: Implement actual backend API calls for message persistence
+            
+            let messages = [];
+            let messageCounter = 0;
+            
+            const messageContainer = document.getElementById('messageContainer');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const typingIndicator = document.getElementById('typingIndicator');
+            
+            // Auto-scroll to bottom
+            function scrollToBottom() {
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+            
+            // Format timestamp
+            function formatTime(date) {
+                return date.toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            }
+            
+            // Create message element
+            function createMessageElement(message, isSent = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${isSent ? 'justify-end' : 'justify-start'} mb-4`;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'max-w-xs lg:max-w-md';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = `${isSent ? 'bg-sent-msg' : 'bg-received-msg'} rounded-lg px-4 py-2 shadow-sm`;
+                
+                const textP = document.createElement('p');
+                textP.className = 'text-gray-800 text-sm';
+                textP.textContent = message.text;
+                
+                const timeP = document.createElement('p');
+                timeP.className = 'text-xs text-gray-500 mt-1 text-right';
+                timeP.textContent = formatTime(message.timestamp) + (isSent ? ' ✓✓' : '');
+                
+                contentDiv.appendChild(textP);
+                contentDiv.appendChild(timeP);
+                bubbleDiv.appendChild(contentDiv);
+                messageDiv.appendChild(bubbleDiv);
+                
+                return messageDiv;
+            }
+            
+            // Send message function
+            function sendMessage() {
+                const text = messageInput.value.trim();
+                if (!text) return;
+                
+                const message = {
+                    id: ++messageCounter,
+                    text: text,
+                    timestamp: new Date(),
+                    isSent: true
+                };
+                
+                messages.push(message);
+                
+                // Add message to UI
+                const messageElement = createMessageElement(message, true);
+                messageContainer.appendChild(messageElement);
+                
+                // Clear input and scroll
+                messageInput.value = '';
+                scrollToBottom();
+                
+                // TODO: Send message to server
+                // TODO: Handle sending state and error handling
+                
+                // Simulate receiving a response (remove in production)
+                setTimeout(() => {
+                    simulateReceivedMessage();
+                }, 1000 + Math.random() * 2000);
+            }
+            
+            // Simulate received message (for demo purposes)
+            function simulateReceivedMessage() {
+                const responses = [
+                    "That's interesting! 🤔",
+                    "I agree with that point",
+                    "Thanks for sharing!",
+                    "Has anyone tried this before?",
+                    "Great idea! 💡",
+                    "I'm not sure about that...",
+                    "Can you explain more?",
+                    "This is really helpful",
+                    "😂😂😂",
+                    "What do others think?"
+                ];
+                
+                if (Math.random() > 0.3) { // 70% chance of response
+                    const message = {
+                        id: ++messageCounter,
+                        text: responses[Math.floor(Math.random() * responses.length)],
+                        timestamp: new Date(),
+                        isSent: false
+                    };
+                    
+                    messages.push(message);
+                    
+                    const messageElement = createMessageElement(message, false);
+                    messageContainer.appendChild(messageElement);
+                    scrollToBottom();
+                }
+            }
+            
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Typing indicator simulation
+            let typingTimeout;
+            messageInput.addEventListener('input', function() {
+                // TODO: Implement real typing indicators with WebSocket
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    // Clear typing indicator
+                }, 1000);
+            });
+            
+            // Auto-refresh messages (polling simulation)
+            // TODO: Replace with WebSocket connection for real-time updates
+            setInterval(() => {
+                // In production, this would poll the server for new messages
+                // For now, we'll occasionally simulate new messages
+                if (Math.random() > 0.95) { // Very low chance for demo
+                    simulateReceivedMessage();
+                }
+            }, 3000);
+            
+            // Initialize
+            scrollToBottom();
+            
+            // Focus input on load
+            messageInput.focus();
+            
+        })();
+    </script>
+
+    <!-- @FUNCTIONALITY: Service Worker for offline capability (optional) -->
+    <!-- TODO: Implement service worker for offline message queue -->
+    
+</body>
+</html>

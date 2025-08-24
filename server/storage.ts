@@ -2,37 +2,20 @@ import { type Message, type InsertMessage } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
   getAllMessages(): Promise<Message[]>;
   createMessage(message: InsertMessage): Promise<Message>;
+  addOnlineUser(sessionId: string): Promise<void>;
+  removeOnlineUser(sessionId: string): Promise<void>;
+  getOnlineUserCount(): Promise<number>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
   private messages: Message[];
+  private onlineUsers: Set<string>;
 
   constructor() {
-    this.users = new Map();
     this.messages = [];
-  }
-
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    this.onlineUsers = new Set();
   }
 
   async getAllMessages(): Promise<Message[]> {
@@ -50,6 +33,18 @@ export class MemStorage implements IStorage {
     };
     this.messages.push(message);
     return message;
+  }
+
+  async addOnlineUser(sessionId: string): Promise<void> {
+    this.onlineUsers.add(sessionId);
+  }
+
+  async removeOnlineUser(sessionId: string): Promise<void> {
+    this.onlineUsers.delete(sessionId);
+  }
+
+  async getOnlineUserCount(): Promise<number> {
+    return this.onlineUsers.size;
   }
 }
 

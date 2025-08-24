@@ -9,7 +9,6 @@ import { Users, Send, Smile } from "lucide-react";
 
 export default function Chat() {
   const [message, setMessage] = useState("");
-  const [onlineCount] = useState(Math.floor(Math.random() * 50) + 20);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -18,6 +17,14 @@ export default function Chat() {
     queryKey: ['/api/messages'],
     refetchInterval: 3000, // Poll every 3 seconds for new messages
   });
+
+  // Fetch online count
+  const { data: onlineData } = useQuery<{ count: number }>({
+    queryKey: ['/api/online-count'],
+    refetchInterval: 5000, // Poll every 5 seconds for online count
+  });
+
+  const onlineCount = onlineData?.count || 1;
 
   // Send message mutation
   const sendMessageMutation = useMutation({
@@ -88,7 +95,7 @@ export default function Chat() {
           <div>
             <h1 className="text-lg font-semibold">Anonymous Chat</h1>
             <p className="text-sm text-green-100" data-testid="text-online-count">
-              {onlineCount} people online
+              {onlineCount} {onlineCount === 1 ? 'person' : 'people'} online
             </p>
           </div>
         </div>

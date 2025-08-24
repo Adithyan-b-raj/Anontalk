@@ -12,10 +12,12 @@ export interface IStorage {
 export class MemStorage implements IStorage {
   private messages: Message[];
   private onlineUsers: Set<string>;
+  private userTimeouts: Map<string, NodeJS.Timeout>;
 
   constructor() {
     this.messages = [];
     this.onlineUsers = new Set();
+    this.userTimeouts = new Map();
   }
 
   async getAllMessages(): Promise<Message[]> {
@@ -36,7 +38,21 @@ export class MemStorage implements IStorage {
   }
 
   async addOnlineUser(sessionId: string): Promise<void> {
+    // Clear existing timeout if user is already online
+    const existingTimeout = this.userTimeouts.get(sessionId);
+    if (existingTimeout) {
+      clearTimeout(existingTimeout);
+    }
+    
     this.onlineUsers.add(sessionId);
+    
+    // Auto-cleanup: remove this session after 30 seconds of inactivity
+    const timeout = setTimeout(() => {
+      this.onlineUsers.delete(sessionId);
+      this.userTimeouts.delete(sessionId);
+    }, 30000);
+    
+    this.userTimeouts.set(sessionId, timeout);
   }
 
   async removeOnlineUser(sessionId: string): Promise<void> {
